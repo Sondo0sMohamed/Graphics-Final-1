@@ -1,3 +1,18 @@
+# Graphics-Final-1
+# Graphics Final Project 
+# Group Id (15)
+ 
+ | Name | sec |Bn Number|
+| ------ | ------ |------| 
+|Yara Metwally |2 |43 | 
+|Samar Ibrahim|1|40|
+|Shymaa Gamal|2|1|
+|Sondos Mohamed|1|42| 
+|Poline Atef|1|23|
+
+# Initializing Variables:
+Here we determine our variables and load our objects(flower,table,stool) and we give the objecs variavle (q,w,e) to make the robot move ad interact with these objects.comes later on the code,and give initiaizations values to the camera 
+```ruby
 #include <math.h>
 #include <GL/glut.h>
 #include "glm.h"
@@ -17,7 +32,7 @@ int pressm=0;
  float q=0.0;
  float w=0.0;
  float e=0.0;
- //robot in z directio
+ //  z directio
  float r=0.0;
 
 float DRot = 90;
@@ -26,15 +41,18 @@ GLMmodel* pmodel;
 float VRot =0.0;
 
 
-GLMmodel* pmodel1 =glmReadOBJ("data/rose+vase.obj");
+GLMmodel* pmodel1 =glmReadOBJ("data/flowers.obj");
 GLMmodel* pmodel2 =glmReadOBJ("data/table.obj");
 GLMmodel* pmodel3 =glmReadOBJ("data/stool.obj");
 double eye[] = { .03, .3,.1 };
 double center[] = { 0, 0, -2};
 double up[] = { 0, 1, 0 };
+```
 
-
-// RGBA
+# Colors Effect:
+Here we assign the color of the source using ambient to choose the color , diffuse to make it more real and rigg it in 3-d plane finally specular to add some light on it ,when we change these parameters the colors ad lights effect will change 
+ ```ruby
+ // RGBA
 GLfloat light_ambient2[] = { 1.0, 0.0, 0.0, 1.0 };
 GLfloat light_diffuse2[] = { 1.0, 0.0, 0.0,1.0 };
 GLfloat light_specular2[] = {1.0, 1.0, 1.0, 1.0 };
@@ -54,8 +72,33 @@ GLfloat lightPos1[] = {-0.5,-5.0,-2.0, 1.0 };
 GLfloat mat_amb_diff[] = {0.643, 0.753, 0.934, 1.0 };
 GLfloat mat_specular[] = { 0.0, 0.0, 0.0, 1.0 };
 GLfloat shininess[] = {100.0 };
+ 
+ ```
+ # the second part (Texture)
+  for the texture part ,we will apply the texture through four steps:
 
-//Makes the image into a texture, and returns the id of the texture
+1. Enable Texture : the function is glEnable(GL_TEXTURE_2D) ,as TEXTURE_2D is the parameter .
+
+2. Load Texture : the goal of this step is to load the texture image to the scene using the function of _textureId=loadTexture(image).
+
+3. Bind Texture : the goal of this step is to select our loaded texture through the function of glBindTexture(GL_TEXTURE_2D, _textureId),where GL_TEXTURE_2D is the target and _textureId is the value returned by the load texture function in step 2.
+
+4. Mapping Texture Coordinates : the goal of this step is to map each vertex in the texture to a specific vertex in the polygon through the function of glTexCoord2f(0.0f, 0.0f)  that we call before each vertex .
+
+   #### Repeating Textures : 
+
+   to repeat the texture on the same ploygon through the function :
+
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST),glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR).
+
+   ## conclusion :
+
+   in this project we dealt with some valuable topics in computer graphics ,like transformation,texture mapping, Lightening an coloring   to implement an application that may help in the biomedical field,specifically in the simulation of the body organs or creating animations in medical training . 
+
+ 
+ 
+ ```ruby
+ //Makes the image into a texture, and returns the id of the texture
 GLuint loadTexture(Image* image) {
       GLuint textureId;
       glGenTextures(1, &textureId); //Make room for our texture
@@ -76,7 +119,15 @@ GLuint loadTexture(Image* image) {
 GLuint _textureId; //The id of the texture
 GLuint _textureId1; //The id of the texture
 
-
+ ```
+ # Draw Function (Part1):
+ Here we import our three objects and draw them and assigining their scale and position using these functins:
+ glmVertexNormals
+ glmScale
+ 
+ 
+ ```ruby
+ 
 void Draw_cube(GLdouble width, GLdouble height, GLdouble depth) // Draw function
 {
    glPushMatrix();
@@ -129,10 +180,13 @@ void drawmodel3(void)
 
 	glmDraw(pmodel3, GLM_SMOOTH | GLM_MATERIAL);
 }
-
-GLuint startList;
-
-//Initializes 3D rendering
+ ```
+ # 3-D Rendering 
+ 
+ 
+ 
+ ```ruby
+ //Initializes 3D rendering
 void initRendering() {
      	 Image* image = loadBMP("image2.bmp");
       	_textureId = loadTexture(image);
@@ -164,21 +218,24 @@ void initRendering() {
         glEnable(GL_DEPTH_TEST);
 
 }
-
-
-
-void draw_right_arm(void)
+ ```
+ 
+ # Draw function (Part2)
+we will draw and  simulate the  full body joints movement by applying transformations (translation,rotation,scaling ),
+  
+  ```ruby
+  void draw_right_arm(void)
 {
    glPushMatrix();
 
-   glTranslatef(-2, 4.5, 0.0);                          //hena x,y
-   glRotatef((-(GLfloat)shoulder) - 90, 0.0, 0.0, 1.0); //rotate lebara
+   glTranslatef(-2, 4.5, 0.0);                           
+   glRotatef((-(GLfloat)shoulder) - 90, 0.0, 0.0, 1.0);  
    glRotatef(180, 1.0, 0.0, 0.0);
    glTranslatef(1.0, 0.25, 0.0); //hena x,y
    glTranslatef(-1.0, 0.0, 0.5);
-   glRotatef(-(GLfloat)shoulder2, 0.0, 1.0, 0.0); //rotate lfoq
+   glRotatef(-(GLfloat)shoulder2, 0.0, 1.0, 0.0);  
    glTranslatef(1.0, 0.0, -0.5);
-   glRotatef(-(GLfloat)shoulder3, 1.0, 0.0, 0.0); //rotate hwalen nafso
+   glRotatef(-(GLfloat)shoulder3, 1.0, 0.0, 0.0);  
    //glColor3f(0.0, 1.0, 0.0);
    Draw_cube(2.0f, 0.5f, 1.0f);
    //forearm
@@ -412,7 +469,11 @@ void draw_left_leg(void)
    glPopMatrix();
 }
 
-void screen_menu(int value)
+  ```
+ 
+ # Choosing Different Grounds :
+ ```ruby
+ void screen_menu(int value)
 {
 	char* name = 0;
 
@@ -437,130 +498,33 @@ void screen_menu(int value)
 	glutPostRedisplay();
 
 }
+ ```
+ 
+ 
+ 
+ 
+ #  Different  ground :
+ When we first run our code  the default background we choose is (brown wood plane) background by clicking on the ground we can choose different ground , if we want to change it we click on the mouse we got (wood2) (chess background)
+ ![brown background](https://raw.githubusercontent.com/Sondo0sMohamed/Graphics-Final-1/master/ardbony.jpeg)
+  
+ **Brown Background**
+ ![chess background](https://raw.githubusercontent.com/Sondo0sMohamed/Graphics-Final-1/master/ardshatrang.jpeg)
+ **Chess Background**
+ ![Grey Background](https://raw.githubusercontent.com/Sondo0sMohamed/Graphics-Final-1/master/ardromady.jpeg)
+ **Grey Background**
 
+# Animation :
+ ![](https://raw.githubusercontent.com/Sondo0sMohamed/Graphics-Final-1/master/animation/animation1_p.gif)
+ 
+ ![](https://raw.githubusercontent.com/Sondo0sMohamed/Graphics-Final-1/master/animation/anaimation2_L.gif)
+ 
+ ![](https://raw.githubusercontent.com/Sondo0sMohamed/Graphics-Final-1/master/animation/animation3_M.gif)
+ 
+# Animation code :
 
-
-void display(void)
-{
-
-
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-        // Clear Depth and Color buffers
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-
-        gluLookAt(eye[0], eye[1], eye[2], center[0], center[1], center[2], up[0], up[1], up[2]);
-
-        glPushMatrix();
-        glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
-        glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-        glPopMatrix();
-        //materials properties
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE,mat_amb_diff);
-        glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-        glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
-	glPushMatrix();
-	glTranslatef(0, 0, -1);
-
-	//floor
-	glPushMatrix();
-	glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, _textureId);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        glBegin(GL_QUADS);
-
-	glNormal3f(0.0,-1.0,0.0);
-	glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(-1,-0.25,2);
-        glTexCoord2f(5.0f,  0.0f);
-        glVertex3f(1,-0.25,2);
-        glTexCoord2f(5.0f,  20.0f);
-        glVertex3f(1,-0.25,-2);
-        glTexCoord2f(0.0f, 20.0f);
-        glVertex3f(-1,-0.25,-2);
-        glEnd();
-	glDisable(GL_TEXTURE_2D);
-
-	glPopMatrix();
-
-//flower
-   glPushMatrix();
-
-   glTranslatef(q, w,e);//for interaction
-   glTranslatef(-.07,.043,.05);
-    glRotatef((GLfloat)flower,0,1,0);
-  glTranslatef(.2,0,0);
-
-	glScalef(.5,.5,.5);
-   drawmodel1();
-	glPopMatrix();
-
-//stool
-   glPushMatrix();
-   glTranslatef(.16, -.1,-.01);
-	glScalef(.5, .5, .5);
-   drawmodel3();
-	glPopMatrix();
-
-
-//table
-   glPushMatrix();
-   glTranslatef(-.3, -.02,-.01);
-	glScalef(1.008,1.008,1.008);
-   drawmodel2();
-	glPopMatrix();
-
-
-
-// robot
-	glPushMatrix();
-    glTranslatef( 0.0, r,0.0);
-    glTranslatef( -.06,0,-.58);
-	glTranslatef( 0.02,.1,1);
-   glTranslatef( 0.01, 0,-.3);
-   glScalef(.032, .032, .032);
-   glTranslatef( 0, 0.0,0);
-   glRotatef(180, 0.0, 1.0, 0.0);
-	glRotatef((GLfloat)angle, 0.0, 1.0, 0.0);
-   glTranslatef( 0, 0.0,0);
-   glTranslatef(0.0, 0.0, x);  // for penguin
-   glPushMatrix();
-   glTranslatef(0.0, 6.0, 0.0);
-   glutWireSphere(1, 10, 10);
-   glPopMatrix();
-   // draw trunck
-   glPushMatrix();
-   glTranslatef(0.0, 1.5, 0.0);
-   /*
-   glScalef(3,6,1);
-   glutSolidCube(1);
-   */
-   Draw_cube(3.0f, 6.0f, 01.0f);
-   glPopMatrix();
-
-   draw_left_arm();
-   draw_right_arm();
-   draw_right_leg();
-   draw_left_leg();
-   glPopMatrix();
-   glPushMatrix();
-   glTranslatef(-6.5, -7, 1.7);
-  // glScalef(3,3,3);
-   //glutSolidCube(1.0);
-    Draw_cube(3.0f, 3.0f, 3.0f);
-   glPopMatrix();
-   glPopMatrix();
-	glutSwapBuffers();
-}
-
-void Timer(int x){
+ ```ruby
+ 
+ void Timer(int x){
 	// Refresh and redraw
 	glutPostRedisplay();
 	glutTimerFunc(50, Timer, 0);
@@ -735,7 +699,7 @@ void timer(int value)
             glutTimerFunc(k, timer, 4);
          }
     }
-// ytharak leodam
+ 
       if (value == 4)
     {
        if (lhip2 < 90 && lknee > -90)
@@ -768,7 +732,7 @@ void timer(int value)
          glutTimerFunc(z, timer,6 );
       }
 
- //ytharak khatwa wahda warah
+ 
  if (value == 6)
     {
        if (lhip2 < 90 && lknee > -90)
@@ -803,7 +767,7 @@ void timer(int value)
 
         glutTimerFunc(m, timer, 8);
      }
-  //ytharak lwarah 3 khatwat
+  
       if (value == 8)
     {
        if (lhip2 < 90 && lknee > -90)
@@ -895,7 +859,7 @@ void timer2(int value)
 {
 
    int l=50;
-    //el goz el awal
+ 
     if (value == 1)
     {
 
@@ -928,7 +892,7 @@ void timer2(int value)
        glutTimerFunc(l, timer2, 3);
     }
 
-   // el goz el tany
+   
    else if (value == 3)
     {
 
@@ -1093,8 +1057,9 @@ void timer2(int value)
 
 
 }
-
-
+```
+# Key board function
+```ruby
 
 void Keyboard(unsigned char Key, int x, int y){
 	switch (Key)
@@ -1160,6 +1125,9 @@ void Keyboard(unsigned char Key, int x, int y){
 	}
 }
 
+```
+# Main Function
+```ruby
 int main (int argc, char** argv)
 {
 
@@ -1193,3 +1161,23 @@ int main (int argc, char** argv)
 
 }
 
+
+ 
+ ```
+Issues
+ 
+ 
+ 
+- we had an issue with the glm header . 
+we had an errot(cannot open include file:glm.h:No such file or directory)  and we solved this issue byextracting the glm code directory to our project directory ,
+then we added the full path of the glm directory to
+ :=> right click on project in the solution viewer => from the drop down menu choose properties => C\C++ => General => Additional Include Directories.
+
+ and finally we added the full path in the edit box of Additional Include Directories.
+
+- we also had an issue in uploading the objects from the data folder,
+ and had an error of cannot open imageloader.h file and we solved this problem by solving CMake installation problem and adding it to the system path variables.
+ 
+ 
+ 
+   
