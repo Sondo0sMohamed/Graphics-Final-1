@@ -1,12 +1,13 @@
 # Graphics-Final-1
 # Graphics Final Project 
+# Group Id (15)
  
- | Name | sec |Bn Number
-| ------ | ------ |------|
-|Yara Metwally |2 |43 |
+ | Name | sec |Bn Number|
+| ------ | ------ |------|------|
+|Yara Metwally |2 |43 |ibrahimsamar858@gmail.com
 |Samar Ibrahim|1|40|
 |Shymaa Gamal|2|1|
-|Sondos Mohamed|1|42|
+|Sondos Mohamed|1|42|sondosmohamedd20@gmail.com
 |Poline Atef|1|23|
 
 # Initializing Variables:
@@ -470,6 +471,34 @@ void draw_left_leg(void)
 
   ```
  
+ # Choosing Different Grounds
+ ```ruby
+ void screen_menu(int value)
+{
+	char* name = 0;
+
+	switch (value) {
+	case 'a':
+		name = "image.bmp";
+		break;
+	case 's':
+		name = "image2.bmp";
+		break;
+	case 'd':
+		name = "image3.bmp";
+		break;
+
+	}
+	if (name) {
+		Image* image = loadBMP(name);
+		_textureId=loadTexture(image);
+      if (!image) exit(0);
+
+   }
+	glutPostRedisplay();
+
+}
+ ```
  
  
  
@@ -491,7 +520,650 @@ void draw_left_leg(void)
  
  ![](https://raw.githubusercontent.com/Sondo0sMohamed/Graphics-Final-1/master/animation/animation3_M.gif)
  
+# Animation code :
+
+ ```ruby
  
+ void Timer(int x){
+	// Refresh and redraw
+	glutPostRedisplay();
+	glutTimerFunc(50, Timer, 0);
+}
+
+
+
+
+//////////////////////////////?????
+void correct()
+{
+	double speed = 0.001;
+	if (eye[0]>0)
+	{
+		eye[0] -= speed;
+		center[0] -= speed;
+	}
+	else
+	{
+		eye[0] += speed;
+		center[0] += speed;
+	}
+
+	if (DRot == 0)
+	{
+		if ((eye[2] >= -2 && eye[2] <= 2) || eye[2]>0)
+		{
+			eye[2] -= speed;
+			center[2] -= speed;
+		}
+		else
+		{
+			eye[2] += speed;
+			center[2] += speed;
+		}
+	}
+	else
+	{
+		if (eye[2]>0)
+		{
+			eye[2] -= speed;
+			center[2] -= speed;
+		}
+		else
+		{
+			eye[2] += speed;
+			center[2] += speed;
+		}
+	}
+
+}
+void SetBound()
+{
+	if (DRot == 0 || eye[0]> 0.15 || eye[0]< -0.15)
+	{
+		if (eye[2] >= -1)
+		{
+			Zmax = 0.7;
+			Zmin = -0.8;
+		}
+		else
+		{
+			Zmax = -1.2;
+			Zmin = -2.4;
+		}
+	}
+	else
+	{
+		Zmax = 0.7;
+		Zmin = -2.4;
+	}
+}
+
+
+void DTimer1(int x){
+
+	DRot -= 1;
+	if (DRot == 0)
+		return;
+	glutPostRedisplay();
+	glutTimerFunc(30, DTimer1, 0);
+
+
+}
+
+void DTimer2(int x){
+	DRot += 1;
+	if (DRot == 90)
+		return;
+	glutPostRedisplay();
+	glutTimerFunc(30, DTimer2, 0);
+}
+
+ // penguin Dance
+   int check =1;
+
+  int check2=1;
+
+void timer(int value)
+{
+   int m=1;
+   int l=30;
+   int z=20;
+  int k=10;
+    if (value == 0)
+    {
+
+          if (lhip < 50)
+      {
+         lhip = (lhip + 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer, 0);
+      }
+       else
+       glutTimerFunc(l, timer, 1);
+    }
+
+
+    else if (value == 1)
+    {
+
+
+         if (lhip >= 5)
+         {
+
+            lhip = (lhip - 5) % 360;
+            glutPostRedisplay();
+            glutTimerFunc(l, timer, 1);
+
+         }
+
+        else
+         {
+            check=check+1;
+            if(check<=2)
+            glutTimerFunc(l, timer, 0);
+            else
+            glutTimerFunc(l, timer, 2);
+
+         }
+
+    }
+
+
+    else if (value == 2)
+    {
+
+       if (rhip > -50)
+      {
+         rhip = (rhip - 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer, 2);
+      }
+       else
+       glutTimerFunc(l, timer, 3);
+    }
+
+    else if (value == 3)
+    {
+       if (rhip <= -5)
+      {
+         rhip = (rhip + 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer, 3);
+      }
+        else
+         {
+            check2=check2+1;
+            if(check2<=2)
+            glutTimerFunc(l, timer, 2);
+            else
+            glutTimerFunc(k, timer, 4);
+         }
+    }
+// ytharak leodam
+      if (value == 4)
+    {
+       if (lhip2 < 90 && lknee > -90)
+      {
+         lhip2 = (lhip2 + 5) % 360;
+         rhip2 = (rhip2 + 5) % 360;
+         lknee = (lknee - 5) % 360;
+         rknee = (rknee - 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(k, timer, 4);
+      }
+     else
+
+        glutTimerFunc(k, timer, 5);
+     }
+
+    else if (value == 5)
+     {
+      if (lhip2 >=0  && lknee < 0 )
+      {
+            x=x-0.1;
+            lhip2 = (lhip2 - 5) % 360;
+            rhip2 = (rhip2 - 5) % 360;
+            lknee = (lknee + 5) % 360;
+            rknee = (rknee + 5) % 360;
+           glutPostRedisplay();
+           glutTimerFunc(k, timer, 5);
+        }
+         else
+         glutTimerFunc(z, timer,6 );
+      }
+
+ //ytharak khatwa wahda warah
+ if (value == 6)
+    {
+       if (lhip2 < 90 && lknee > -90)
+      {
+         lhip2 = (lhip2 + 5) % 360;
+         rhip2 = (rhip2 + 5) % 360;
+         lknee = (lknee - 5) % 360;
+         rknee = (rknee - 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(z, timer, 6);
+      }
+     else
+
+        glutTimerFunc(z, timer, 7);
+     }
+
+
+    else if (value == 7)
+     {
+      if (lhip2 >= 0  && lknee < 0 )
+      {
+            x=x+0.1;
+            lhip2 = (lhip2 - 5) % 360;
+            rhip2 = (rhip2 - 5) % 360;
+            lknee = (lknee + 5) % 360;
+            rknee = (rknee + 5) % 360;
+           glutPostRedisplay();
+           glutTimerFunc(z, timer, 7);
+
+      }
+       else
+
+        glutTimerFunc(m, timer, 8);
+     }
+  //ytharak lwarah 3 khatwat
+      if (value == 8)
+    {
+       if (lhip2 < 90 && lknee > -90)
+      {
+         lhip2 = (lhip2 + 5) % 360;
+         rhip2 = (rhip2 + 5) % 360;
+         lknee = (lknee - 5) % 360;
+         rknee = (rknee - 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(m, timer, 8);
+      }
+     else
+
+        glutTimerFunc(m, timer, 9);
+     }
+
+
+    else if (value == 9)
+     {
+      if (lhip2 > 0  && lknee < 0 )
+      {
+
+        if(x<=5.2)
+        {
+            x=x+0.1;
+            lhip2 = (lhip2 - 5) % 360;
+            rhip2 = (rhip2 - 5) % 360;
+            lknee = (lknee + 5) % 360;
+            rknee = (rknee + 5) % 360;
+           glutPostRedisplay();
+           glutTimerFunc(m, timer, 9);
+        }
+      }
+      else
+         glutTimerFunc(m, timer, 8);
+
+     }
+
+
+}
+
+
+void timer4(int value)
+{
+   int m=1;
+
+         if (value == 0)
+    {
+       if (lhip2 < 90 && lknee > -90)
+      {
+         lhip2 = (lhip2 + 5) % 360;
+         rhip2 = (rhip2 + 5) % 360;
+         lknee = (lknee - 5) % 360;
+         rknee = (rknee - 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(m, timer4, 0);
+      }
+     else
+
+        glutTimerFunc(m, timer4, 1);
+     }
+     else if (value == 1)
+     {
+      if (lhip2 > 3  && lknee < 3 )
+      {
+
+        if(x > .3)
+        {
+            x=x-0.1;
+            lhip2 = (lhip2 - 5) % 360;
+            rhip2 = (rhip2 - 5) % 360;
+            lknee = (lknee + 5) % 360;
+            rknee = (rknee + 5) % 360;
+           glutPostRedisplay();
+           glutTimerFunc(m, timer4, 1);
+        }
+      }
+          else
+
+        glutTimerFunc(m, timer4, 0);
+
+
+     }
+}
+
+ // Doing activity
+
+void timer2(int value)
+{
+
+   int l=50;
+    //el goz el awal
+    if (value == 1)
+    {
+
+      if (  lhip < 60 && shoulder <= 150)
+      {
+         shoulder = (shoulder + 10) % 360;
+         lhip = (lhip + 5) % 360;
+         rhip = (rhip - 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer2, 1);
+      }
+       else
+       glutTimerFunc(l, timer2, 2);
+    }
+
+
+    else if (value == 2)
+    {
+
+      if ( lhip >= 0 && shoulder >= 5 )
+      {
+         shoulder = (shoulder - 10) % 360;
+         lhip = (lhip - 5) % 360;
+         rhip = (rhip +5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer2, 2);
+
+      }
+           else
+       glutTimerFunc(l, timer2, 3);
+    }
+
+   // el goz el tany
+   else if (value == 3)
+    {
+
+      if (lhip2 < 90 && shoulder2 <= 160 )
+      {
+         shoulder2 = (shoulder2 + 5) % 360;
+         lhip2 = (lhip2 + 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer2, 3);
+
+      }
+           else
+       glutTimerFunc(l, timer2, 4);
+    }
+
+   else if (value == 4)
+    {
+
+       if (shoulder2 >= 5 && lhip2 >= 0)
+      {
+         lhip2 = (lhip2 - 5) % 360;
+         shoulder2 = (shoulder2 - 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer2, 4);
+
+      }
+           else
+       glutTimerFunc(l, timer2, 5);
+    }
+
+       else if (value == 5)
+    {
+
+      if (rhip2 < 90 && shoulder2 <= 160 )
+      {
+         shoulder2 = (shoulder2 + 5) % 360;
+         rhip2 = (rhip2 + 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer2, 5);
+
+      }
+           else
+       glutTimerFunc(l, timer2, 6);
+    }
+
+   else if (value == 6)
+    {
+
+       if (shoulder2 >= 5 && rhip2 >= 0)
+      {
+         rhip2 = (rhip2 - 5) % 360;
+         shoulder2 = (shoulder2 - 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer2, 6);
+
+      }
+
+    }
+
+    }
+
+
+
+ // animation with interaction
+
+   void timer3(int value)
+{
+   int l=70;
+
+    if (value == 1)
+    {
+       angle=90;
+       if ( lknee > -90 && shoulder2 < 90 && shoulder > -30 && fingerBase > -20 )
+      {
+
+
+         if(r == 0 || r >= -6.0)
+         {
+         lknee = (lknee - 5) % 360;
+         rknee = (rknee - 5) % 360;
+         shoulder2 = (shoulder2 + 5) % 360;
+         shoulder = (shoulder -3) % 360;
+         fingerBase = (fingerBase - 1) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer3, 1);
+           r=r-.01;
+         }
+      }
+
+
+     else
+
+        glutTimerFunc(l, timer3, 2);
+     }
+
+    else if (value == 2)
+     {
+      if ( lknee < 0  && fingerBase > -20)
+      {
+         fingerBase = (fingerBase - 1) % 360;
+         lknee = (lknee + 5) % 360;
+         rknee = (rknee + 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer3, 2);
+         // w=.3;
+
+         w=w+.01;
+         r=r+0.01;
+      }
+      else
+
+        glutTimerFunc(l, timer3, 3);
+
+     }
+
+   else if (value == 3)
+     {
+      if ( angle > -60 )
+      {
+         q=q+.0019;
+         e=e-.003;
+         angle = (angle - 5) % 360;
+         flower = (flower - 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer3, 3);
+      }
+      else
+
+        glutTimerFunc(l, timer3, 4);
+
+     }
+ else if (value == 4)
+     {
+      if ( shoulder2  < 90 && fingerBase > -30)
+      {
+         w=w+.01;
+         q=q-.003;
+         fingerBase = (fingerBase - 1) % 360;
+         shoulder2= (shoulder2 + 5) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer3, 4);
+      }
+      else
+
+        glutTimerFunc(l, timer3, 5);
+
+     }
+       else if (value == 5)
+     {
+      if ( angle <= 0 && fingerBase < 0 && shoulder2  >0 && shoulder <0)
+      {
+
+         fingerBase = (fingerBase + 3) % 360;
+          shoulder2= (shoulder2 - 9) % 360;
+           shoulder = (shoulder +3) % 360;
+         angle = (angle + 6) % 360;
+         glutPostRedisplay();
+         glutTimerFunc(l, timer3, 5);
+      }
+
+     }
+
+
+}
+```
+# Key board function
+```ruby
+
+void Keyboard(unsigned char Key, int x, int y){
+	switch (Key)
+	{
+
+	case 27:
+		exit(0);
+
+		break;
+
+	case ' ':
+		if (DRot == 0 || DRot == 90)
+		{
+			if (DRot)
+				DTimer1(0);
+			else
+				DTimer2(0);
+		}
+		break;
+
+	case 'p':
+   press=press+1;
+   if(press == 1 )
+   {
+
+         glutTimerFunc(0, timer, 0); //penguin
+   }
+   else if (press == 2 && pressm==0)
+   {
+      glutTimerFunc(0, timer4, 0);
+      glutTimerFunc(4500, timer, 0);
+   }
+   else {
+      break;
+   }
+      break;
+   case 'l':
+       glutTimerFunc(0, timer2, 1);  // Activity
+
+      break;
+
+   case 'm':
+      if(press==0 && pressm == 0)
+      {
+          pressm=1;
+       glutTimerFunc(0, timer3, 1);  // Activity
+      }
+      else if(press != 0 && pressm == 0)
+      {
+         pressm=1;
+         glutTimerFunc(0, timer4, 0);
+          glutTimerFunc(2000, timer3, 1);
+
+      }
+      else if(pressm != 1)
+      {
+           break;
+      }
+      break;
+
+	default:
+		break;
+	}
+}
+
+```
+# Main Function
+```ruby
+int main (int argc, char** argv)
+{
+
+	glutInit(&argc, argv);
+	glutInitWindowSize(windowWidth, windowHeight);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutCreateWindow("Body");
+	initRendering();
+
+	glMatrixMode(GL_PROJECTION);
+	gluPerspective(60, aspect, 0.1, 10);
+
+
+
+	glutDisplayFunc(display);
+   init();
+	glutKeyboardFunc(Keyboard);
+	Timer(0);
+	glutCreateMenu(screen_menu);
+
+	glutAddMenuEntry("Models", 0);
+	glutAddMenuEntry("", 0);
+	glutAddMenuEntry("wood2", 's');
+	glutAddMenuEntry("wood", 'a');
+	glutAddMenuEntry("metal", 'd');
+
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+	//glutTimerFunc(0,Timer1,0);
+	glutMainLoop();
+	return 0;
+
+}
+
+
+ 
+ ```
  
  
  
